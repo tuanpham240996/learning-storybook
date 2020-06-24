@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../../css/_bundle.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Alert, Container, Row, Col } from 'react-bootstrap'
 
 const DefaultAlert = props => {
