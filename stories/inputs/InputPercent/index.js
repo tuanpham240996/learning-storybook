@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
 import BigNumber from 'bignumber.js/bignumber';
-import { InputGroup, FormControl } from 'react-bootstrap';
+import {InputGroup, FormControl, FormText} from 'react-bootstrap';
 
 const BN = BigNumber.clone({ DECIMAL_PLACES: 2 });
 const REGEX = /^(\d+|\d+\.\d*)$/;
@@ -128,14 +128,13 @@ class InputPercentField extends Component {
             </InputGroup.Prepend>
           )}
           {!isEmpty(error) && (
-            <p style={{
+            <FormText id="passwordHelpBlock" muted style={{
               color: 'crimson',
               fontWeight: 400,
               inlineSize: 'inherit',
-              marginLeft: '20px',
             }}>
               {`${error.fieldName}: ${error.errorMessage}`}
-            </p>
+            </FormText>
           )}
         </InputGroup>
       </Fragment>

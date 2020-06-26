@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
-import { FormControl, InputGroup } from 'react-bootstrap';
+import { InputGroup } from 'react-bootstrap';
+import { Radio, RadioGroup } from 'react-radio-group'
 
-class InputDropDown extends Component {
+class InputCheckBox extends Component {
   static defaultProps = {
     className: undefined,
     label: undefined,
@@ -11,6 +12,10 @@ class InputDropDown extends Component {
     disabledLabel: false,
     disabled: false,
     error: {},
+    options: [
+      { value: true, label: 'Yes', checked: false },
+      { value: false, label: 'No', checked: false },
+    ],
   };
 
   constructor(props) {
@@ -19,22 +24,19 @@ class InputDropDown extends Component {
       value: props.value,
       error: props.error,
       errorMessage: `Invalid value field!!!`,
+      options: props.options,
     };
     this.default = this.props.value;
   }
 
-  onChange(event) {
-    const { value } = event.target;
-    this.setState({ value });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.value !== this.props.value) {
-      const { onChange } = this.props;
-      if (onChange) {
-        onChange({ target: this.props.value});
-      }
+  onChange(value) {
+    const { options } = this.state;
+    if (!isEmpty(options)) {
+      options.find(item => {
+        item.checked = item.value === value;
+      });
     }
+    this.setState({ options });
   }
 
   getBorderStyle() {
@@ -57,8 +59,7 @@ class InputDropDown extends Component {
       disabled,
       readOnly,
     } = this.props;
-    const { value } = this.state;
-    const displayValue = value;
+    const { options } = this.state;
     let styleBorder = this.getBorderStyle();
     return (
       <Fragment>
@@ -67,25 +68,31 @@ class InputDropDown extends Component {
             <InputGroup.Prepend>
               <InputGroup.Text style={{
                 border: '1.15px' + styleBorder,
+                width: '60px',
               }}>{label}</InputGroup.Text>
             </InputGroup.Prepend>
           )}
-          <FormControl
-            value={displayValue}
-            disabled={disabled || readOnly}
-            onChange={(event) => this.onChange(event)}
-            style={{
-              border: '1.5px' + styleBorder,
-            }}
-            type="date"
-          />
+          <RadioGroup name="fruits" style={{ paddingLeft: '15px' }} onChange={(e) => this.onChange(e)} >
+            {options.map((radio) => (
+              <div className="radio-button-background">
+                <Radio
+                  disabled={disabled || readOnly}
+                  value={radio.value}
+                  className="radio-button"
+                  style={{ marginRight: '10px' }}
+                  checked={radio.checked}
+                />
+                {radio.label}
+              </div>
+            ))}
+          </RadioGroup>
         </InputGroup>
       </Fragment>
     );
   }
 }
 
-InputDropDown.propTypes = {
+InputCheckBox.propTypes = {
   /** DOM children */
   className: PropTypes.string,
   // the label display on the left field
@@ -104,4 +111,4 @@ InputDropDown.propTypes = {
   readOnly: PropTypes.bool
 };
 
-export default InputDropDown;
+export default InputCheckBox;
